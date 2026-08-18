@@ -1,0 +1,231 @@
+/* ═══════════════════════════════════════════
+   AGROTECH — EFEITOS DOS CARDS
+   Carregado DEPOIS do style.css, então sobrescreve
+   o hover simples que existia antes.
+   Nada aqui muda a paleta de cores do site.
+═══════════════════════════════════════════ */
+
+/* variaveis dos efeitos */
+:root {
+  --fx-ease: cubic-bezier(.22,.61,.36,1);
+  --fx-lift: -5px;
+  --fx-glow: rgba(45,184,78,.55);
+  --fx-spot: rgba(45,184,78,.16);
+}
+[data-theme="light"] {
+  --fx-glow: rgba(45,158,79,.45);
+  --fx-spot: rgba(45,158,79,.10);
+}
+
+/* ── BASE COMUM DE TODOS OS CARDS ────────────── */
+.feat-card,
+.mat-card,
+.member-card,
+.ref-card,
+.spec-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transform: translateY(0);
+  transition:
+    transform .45s var(--fx-ease),
+    border-color .35s ease,
+    box-shadow .45s var(--fx-ease),
+    background-color .35s ease;
+  will-change: transform;
+}
+
+/* leve textura de profundidade no fundo do card */
+.feat-card,
+.mat-card,
+.spec-card {
+  background-image: linear-gradient(160deg, rgba(45,184,78,.05) 0%, transparent 42%);
+}
+[data-theme="light"] .feat-card,
+[data-theme="light"] .mat-card,
+[data-theme="light"] .spec-card {
+  background-image: linear-gradient(160deg, rgba(45,158,79,.05) 0%, transparent 42%);
+}
+
+/* ── CAMADA 1: holofote que segue o mouse ────── */
+.feat-card::before,
+.mat-card::before,
+.member-card::before,
+.ref-card::before,
+.spec-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity .4s ease;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 0%),
+    var(--fx-spot) 0%,
+    transparent 62%
+  );
+  pointer-events: none;
+}
+.feat-card:hover::before,
+.mat-card:hover::before,
+.member-card:hover::before,
+.ref-card:hover::before,
+.spec-card:hover::before { opacity: 1; }
+
+/* ── CAMADA 2: linha de luz que corre no topo ── */
+.feat-card::after,
+.mat-card::after,
+.spec-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  height: 2px; width: 100%;
+  z-index: 2;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--fx-glow) 45%,
+    var(--fx-glow) 55%,
+    transparent 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .55s var(--fx-ease);
+  pointer-events: none;
+}
+.feat-card:hover::after,
+.mat-card:hover::after,
+.spec-card:hover::after { transform: scaleX(1); }
+
+/* ── ELEVAÇÃO NO HOVER ───────────────────────── */
+.feat-card:hover,
+.mat-card:hover,
+.spec-card:hover {
+  transform: translateY(var(--fx-lift));
+  border-color: rgba(45,184,78,.40);
+  box-shadow:
+    0 18px 40px -14px rgba(0,0,0,.65),
+    0 0 0 1px rgba(45,184,78,.10),
+    0 0 28px -8px rgba(45,184,78,.22);
+}
+.member-card:hover {
+  transform: translateY(-7px);
+  border-color: rgba(45,184,78,.40);
+  box-shadow:
+    0 22px 46px -16px rgba(0,0,0,.7),
+    0 0 30px -10px rgba(45,184,78,.25);
+}
+.ref-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 12px 30px -12px rgba(0,0,0,.6);
+}
+
+[data-theme="light"] .feat-card:hover,
+[data-theme="light"] .mat-card:hover,
+[data-theme="light"] .spec-card:hover {
+  border-color: #9ccf9c;
+  box-shadow:
+    0 16px 34px -14px rgba(26,92,42,.24),
+    0 0 0 1px rgba(45,158,79,.12);
+}
+[data-theme="light"] .member-card:hover {
+  border-color: #9ccf9c;
+  box-shadow: 0 20px 40px -16px rgba(26,92,42,.26);
+}
+[data-theme="light"] .ref-card:hover {
+  box-shadow: 0 12px 28px -12px rgba(26,92,42,.20);
+}
+
+/* ── ÍCONES: crescem e acendem ───────────────── */
+.feat-icon, .mat-icon {
+  transition:
+    transform .45s var(--fx-ease),
+    box-shadow .4s ease,
+    border-color .35s ease,
+    background-color .35s ease;
+}
+.feat-card:hover .feat-icon {
+  transform: translateY(-2px) scale(1.10) rotate(-4deg);
+  background: rgba(45,184,78,.20);
+  border-color: rgba(45,184,78,.45);
+  box-shadow: 0 0 22px -4px rgba(45,184,78,.45);
+}
+.mat-card:hover .mat-icon {
+  transform: translateY(-2px) scale(1.10) rotate(-4deg);
+  box-shadow: 0 0 22px -6px currentColor;
+}
+[data-theme="light"] .feat-card:hover .feat-icon {
+  background: #d9f0d9;
+  border-color: #8cc78c;
+  box-shadow: 0 0 18px -6px rgba(45,158,79,.55);
+}
+
+/* ── TEXTO E NÚMEROS ─────────────────────────── */
+.feat-name, .mat-name, .feat-metric {
+  transition: color .3s ease, transform .45s var(--fx-ease);
+}
+.feat-card:hover .feat-name,
+.mat-card:hover .mat-name { color: var(--green5); }
+[data-theme="light"] .feat-card:hover .feat-name,
+[data-theme="light"] .mat-card:hover .mat-name { color: var(--green2); }
+
+.feat-card:hover .feat-metric {
+  transform: translateX(3px);
+  text-shadow: 0 0 20px rgba(45,184,78,.45);
+}
+[data-theme="light"] .feat-card:hover .feat-metric { text-shadow: none; }
+
+/* separador do card acende */
+.feat-metric { transition: border-color .35s ease, transform .45s var(--fx-ease), text-shadow .35s ease; }
+.feat-card:hover .feat-metric { border-top-color: rgba(45,184,78,.30); }
+
+/* seta do link "Acessar documentação →" ganha impulso */
+.mat-card:hover .mat-link .ico { transform: translateX(6px); }
+.mat-link .ico { transition: transform .35s var(--fx-ease); }
+.mat-link { transition: color .3s ease, letter-spacing .35s var(--fx-ease); }
+.mat-card:hover .mat-link { letter-spacing: .2px; }
+
+/* ── APARECER AO ROLAR A PÁGINA ──────────────── */
+.fx-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity .7s var(--fx-ease),
+    transform .7s var(--fx-ease);
+}
+.fx-reveal.fx-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── RESPEITA QUEM DESATIVOU ANIMAÇÕES ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .feat-card, .mat-card, .member-card, .ref-card, .spec-card,
+  .feat-icon, .mat-icon, .fx-reveal {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ── NO CELULAR: sem elevação (não existe hover) ── */
+@media (hover: none) {
+  .feat-card:hover, .mat-card:hover,
+  .member-card:hover, .spec-card:hover { transform: none; }
+  .ref-card:hover { transform: none; }
+}
+
+/* ── EQUIPE: foto com zoom suave ─────────────── */
+.member-photo { overflow: hidden; }
+.member-photo img,
+.photo-avatar {
+  transition: transform .6s var(--fx-ease);
+}
+.member-card:hover .member-photo img { transform: scale(1.06); }
+.member-card:hover .photo-avatar     { transform: scale(1.08); }
+
+.member-name { transition: color .3s ease; }
+.member-card:hover .member-name { color: var(--green5); }
+[data-theme="light"] .member-card:hover .member-name { color: var(--green2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .member-photo img, .photo-avatar { transition: none !important; transform: none !important; }
+}
